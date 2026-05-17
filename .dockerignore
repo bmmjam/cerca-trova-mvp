@@ -1,0 +1,18 @@
+# Things the backend image doesn't need from the build context.
+.git
+.venv
+__pycache__
+*.pyc
+*.egg-info
+data/raw
+data/*.db
+data/*.db-journal
+frontend
+.env
+.env.*
+*.png
+*.md
+docs
+.idea
+.vscode
+.DS_Store
