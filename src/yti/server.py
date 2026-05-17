@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import Literal
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, Header, HTTPException
+from fastapi import FastAPI, File, Header, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
@@ -326,3 +326,34 @@ def admin_ingest_status(x_admin_token: str | None = Header(default=None)) -> dic
     with store.connect(DB_PATH) as conn:
         snapshot["stats"] = store.stats(conn)
     return snapshot
+
+
+@app.post("/api/admin/upload-db")
+async def admin_upload_db(
+    file: UploadFile = File(...),
+    x_admin_token: str | None = Header(default=None),
+) -> dict:
+    """Accept a SQLite DB upload from an operator's local machine.
+
+    Workaround for the YouTube-blocks-datacenter-IPs problem: ingest runs fine
+    on a residential connection; you ship the resulting `data/chunks.db` to
+    the hosted backend with one curl --form upload.
+    """
+    _require_admin(x_admin_token)
+    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+    tmp = DB_PATH.with_suffix(".tmp.upload")
+    total = 0
+    with open(tmp, "wb") as f:
+        while chunk := await file.read(1024 * 1024):
+            total += len(chunk)
+            f.write(chunk)
+    # Basic sanity: SQLite files start with "SQLite format 3\0".
+    with open(tmp, "rb") as f:
+        magic = f.read(16)
+    if magic != b"SQLite format 3\x00":
+        tmp.unlink(missing_ok=True)
+        raise HTTPException(400, "uploaded file is not a SQLite database")
+    tmp.replace(DB_PATH)
+    with store.connect(DB_PATH) as conn:
+        stats = store.stats(conn)
+    return {"status": "uploaded", "bytes": total, "stats": stats}
