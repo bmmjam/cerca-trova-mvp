@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+  html,
+  body {
+    @apply bg-forest-950 text-cream-100 font-body antialiased;
+    background-image:
+      radial-gradient(ellipse at 10% -10%, rgba(168, 122, 74, 0.10), transparent 45%),
+      radial-gradient(ellipse at 100% 100%, rgba(44, 58, 45, 0.55), transparent 50%),
+      linear-gradient(180deg, #0a110d 0%, #0f1812 60%, #0a110d 100%);
+    background-attachment: fixed;
+    font-feature-settings: "kern", "liga", "calt", "onum";
+  }
+  ::selection {
+    background: rgba(201, 160, 78, 0.4);
+    color: #fbf7ed;
+  }
+}
+
+@layer components {
+  /* --- surfaces ----------------------------------------------------- */
+  .card {
+    @apply rounded-sm border border-forest-700/70 bg-forest-800/60 backdrop-blur-sm shadow-atelier;
+  }
+  .card-warm {
+    @apply card bg-forest-800/80 border-cream-800/30;
+  }
+
+  /* --- type --------------------------------------------------------- */
+  .display {
+    @apply font-serif text-cream-50 tracking-tight;
+    font-feature-settings: "kern", "liga", "swsh", "calt";
+  }
+  .eyebrow {
+    @apply font-sans text-[10px] uppercase tracking-widest text-cream-400;
+  }
+  .quiet {
+    @apply text-cream-400/80 italic;
+  }
+
+  /* --- inputs ------------------------------------------------------- */
+  .input {
+    @apply w-full rounded-sm border border-forest-600/70 bg-forest-900/70 px-4 py-2.5
+           text-cream-100 placeholder-cream-700 font-body text-base
+           focus:border-brass focus:outline-none focus:ring-1 focus:ring-brass/60
+           transition-colors;
+  }
+  textarea.input { @apply leading-relaxed; }
+
+  /* --- buttons ------------------------------------------------------ */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-sm px-5 py-2.5
+           font-sans text-[11px] uppercase tracking-widest font-medium
+           transition-all disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply btn bg-cream-100 text-forest-900 hover:bg-cream-50 shadow-soft;
+  }
+  .btn-ghost {
+    @apply btn border border-cream-200/30 text-cream-100 hover:bg-forest-700/40 hover:border-cream-200/60;
+  }
+  .btn-brass {
+    @apply btn bg-brass text-forest-950 hover:bg-brass-hover;
+  }
+
+  /* --- chips -------------------------------------------------------- */
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-sm border border-forest-600/60 bg-forest-900/40
+           px-2.5 py-1 font-sans text-[10px] uppercase tracking-widest text-cream-300;
+  }
+  .chip-brass {
+    @apply chip border-brass/40 text-brass;
+  }
+
+  /* --- prose / markdown rendered output ----------------------------- */
+  .md {
+    @apply font-body text-cream-100 leading-relaxed;
+  }
+  .md h1, .md h2, .md h3 { @apply font-serif text-cream-50 mt-5 mb-2 tracking-tight; }
+  .md h1 { @apply text-2xl; }
+  .md h2 { @apply text-xl; }
+  .md h3 { @apply text-lg; }
+  .md p { @apply leading-relaxed my-2.5 text-cream-100; }
+  .md ul { @apply list-disc pl-5 my-2 marker:text-brass; }
+  .md ol { @apply list-decimal pl-5 my-2 marker:text-brass; }
+  .md li { @apply my-1.5; }
+  .md a { @apply text-brass underline underline-offset-4 decoration-brass/40 hover:decoration-brass-hover hover:text-brass-hover; }
+  .md code { @apply rounded-sm bg-forest-900/80 border border-forest-700/60 px-1.5 py-0.5 text-xs font-mono text-cream-100; }
+  .md blockquote { @apply border-l-2 border-brass/60 pl-4 italic text-cream-200/90 my-3; }
+  .md strong { @apply text-cream-50 font-semibold; }
+  .md hr { @apply border-forest-700 my-5; }
+  .md table { @apply w-full border-collapse my-3 text-sm; }
+  .md th, .md td { @apply border border-forest-700 px-2 py-1.5; }
+  .md th { @apply bg-forest-800 text-cream-50; }
+
+  /* --- decorative ornament ----------------------------------------- */
+  .ornament {
+    @apply flex items-center gap-3 text-brass/60;
+  }
+  .ornament::before, .ornament::after {
+    content: "";
+    @apply flex-1 h-px bg-gradient-to-r from-transparent via-brass/30 to-transparent;
+  }
+}
+
+@layer utilities {
+  .text-shadow-soft {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+  .small-caps {
+    font-variant-caps: all-small-caps;
+    letter-spacing: 0.15em;
+  }
+}
